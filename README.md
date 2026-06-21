@@ -1,13 +1,13 @@
 # TWTAI Skills — a sample Claude Code marketplace
 
-A complete, working **reference marketplace** for the Tech Writer's Tribe (TWT) AI program. It exists to show participants *how the pieces fit together* — a marketplace that contains a plugin, and a plugin that bundles a command, a skill, an agent, a hook, and (remote) MCP servers — plus a standalone script and a sample doc to test on.
+A complete, working **reference marketplace** for the Tech Writer's Tribe (TWT) AI program. It exists to show participants *how the pieces fit together* — a marketplace that contains a plugin, and a set of skills, commands, and agents.
 
 Clone it, read it, install it, then build your own the same way.
 
 ## The hierarchy at a glance
 
 ```
-twtai-skill/                          ← THIS REPO = a marketplace
+samyak-twtai-skill/                   ← THIS REPO = a marketplace
 ├── .claude-plugin/
 │   └── marketplace.json              ← the catalog (lists plugins)
 ├── plugins/
@@ -38,11 +38,11 @@ twtai-skill/                          ← THIS REPO = a marketplace
 ## Use it (as an individual)
 
 ```
-/plugin marketplace add AmanProjects/twtai-skill   ← add the catalog
-/plugin install doc-skills@twtai                    ← install the plugin
+/plugin marketplace add Samyak-M/samyak-twtai-skill   ← add the catalog
+/plugin install samyak-doc-skills@Samyak-twtai        ← install the plugin
 ```
 
-`twtai` is the marketplace `name` from `marketplace.json` (not the repo name). After installing, these are available:
+`Samyak-twtai` is the marketplace `name` from `marketplace.json` (not the repo name). After installing, these are available:
 
 | Component | How you use it |
 |-----------|----------------|
@@ -61,7 +61,7 @@ This repo deliberately uses **online, hosted** MCP servers so there is nothing t
 | **DeepWiki** (Cognition/Devin) | `https://mcp.deepwiki.com/mcp` | Ask questions about any public GitHub repo's docs |
 | **Claude Code Docs** (Anthropic) | `https://code.claude.com/docs/mcp` | Search the official Claude Code documentation |
 
-Installing the `doc-skills` plugin connects them automatically. To connect **without** the plugin, see [`examples/remote-mcp/`](examples/remote-mcp/) — it shows both the one-line `claude mcp add` command and the shareable project `.mcp.json`.
+Installing the `doc-skills` plugin connects them automatically. To connect **without** the plugin, see [`examples/remote-mcp/`](examples/remote-mcp/) — it shows both the one-line `claude mcp add` command.
 
 ## Try the standalone script (no install needed)
 
@@ -69,7 +69,7 @@ Installing the `doc-skills` plugin connects them automatically. To connect **wit
 node scripts/check-links.mjs README.md
 ```
 
-Dependency-free Markdown link checker (Node 18+). Reports broken http(s) links and missing relative files. (Try it on `README.md` — which has real links — rather than the sample doc, whose only URL sits inside a code block.)
+Dependency-free Markdown link checker (Node 18+). Reports broken http(s) links and missing relative files. (Try it on `README.md` — which has real links — rather than the sample doc.)
 
 ## Build your own marketplace (the 5-minute loop)
 
