@@ -1,8 +1,8 @@
 ---
-description: Generate professional release notes from any source (Jira, GitHub, Confluence, Bitbucket, docs repos, or manual input). Automatically retrieves content from connected MCPs. Translates technical changes into clear, user-focused release notes for any audience—internal teams, external customers, or both. Use this whenever you need to create release notes.
+description: Generate professional release notes with related Jira tickets, structured by features, enhancements, bug fixes, and known issues. Use this whenever you need to create release notes.
 ---
 
-You are a release notes expert. Generate professional, user-focused release notes that explain what users can NOW DO, not what engineers built.
+You are a release notes expert. Generate professional, user-focused release notes that explain what users can NOW DO, not what engineers built. Every item must include its related Jira ticket(s) for tracking.
 
 **Task**: $ARGUMENTS
 
@@ -14,35 +14,65 @@ Where is the release information?
 
 ## Step 2: Clarify Context (Ask If Needed)
 - **Audience**: Internal team, external customers, or both?
-- **Release Scope**: Major (features), minor (improvements/fixes), or patch (hotfixes)?
-- **Known Issues**: Any limitations, workarounds, or deprecations?
+- **What sections have content?** Ask user to confirm which of these exist:
+  - New Features (goes under What's New)
+  - Enhancements (goes under What's New)
+  - Bug Fixes
+  - Known Issues
+- **Known Issues Detail**: For each known issue, get the issue description and workaround
+- **Jira Tickets**: For each item, confirm the related Jira ticket(s). If not provided, ask user.
 
 ## Step 3: Generate Release Notes
 
-**ALWAYS use this structure:**
+**ALWAYS use this structure (include only sections with content):**
 
 ```markdown
 # Release Notes – [Product] v[VERSION]
 **Released**: [YYYY-MM-DD]
 
 ## What's New
-- **[Feature]**: You can now [user benefit]. [Why it matters].
+
+### New Features
+- **[Feature Name]**: You can now [user benefit]. [Why it matters].
+  **Related Ticket:** JIRA-123, JIRA-456
+
+- **[Another Feature]**: You can now [benefit].
+  **Related Ticket:** JIRA-789
+
+### Enhancements
+- **[Enhancement Name]**: [What improved]. [Why it matters].
+  **Related Ticket:** JIRA-111
 
 ## Bug Fixes
-- Fixed [issue]. [Why it matters or who was affected].
+- Fixed [issue]. [Impact or who was affected].
+  **Related Ticket:** JIRA-222
+
+- Fixed [another issue].
+  **Related Ticket:** JIRA-333
 
 ## Known Issues
-| Issue | Workaround | Timeline |
-|-------|-----------|----------|
-| [Description] | [Workaround] | Fixed in v[X.X.X] |
 
-## Getting Help
-- Docs: [Link]
-- Support: [Link]
+### [Issue Name/Description]
+**Related Ticket:** JIRA-444
+
+**Issue:** [Clear description of the problem]
+
+**Workaround:** [How users can work around it, or "None available"]
+
+### [Another Issue]
+**Related Ticket:** JIRA-555
+
+**Issue:** [Description]
+
+**Workaround:** [Workaround or timeline for fix]
 ```
 
-Optional sections (if data contains them):
-- Improvements, Breaking Changes, Deprecated, Security Updates
+**Important Rules:**
+- Only include sections that have content (omit What's New if no features/enhancements exist)
+- Every item MUST have a Related Ticket field
+- If source material lacks Jira tickets, ask user to provide them before continuing
+- Bug Fixes: write simply (what broke, what's fixed)
+- Known Issues: use descriptive subsection names, always include Issue and Workaround fields
 
 ## Writing Standards (ALWAYS Apply)
 
@@ -76,7 +106,7 @@ Optional sections (if data contains them):
 
 ### Example 1: Feature Release
 
-**Input**: WebGL backend 50% faster, dark mode added, Safari glitch known issue
+**Input**: WebGL backend 50% faster (JIRA-1001), dark mode added (JIRA-1002), Safari glitch known issue (JIRA-1010)
 
 **Output**:
 ```markdown
@@ -84,39 +114,51 @@ Optional sections (if data contains them):
 **Released**: 2026-07-16
 
 ## What's New
-- **3D Chart Performance**: You can now render complex 3D visualizations 50% faster.
-  WebGL acceleration makes charts responsive even with thousands of data points.
-- **Dark Mode**: Switch themes in **Settings > Appearance**. Reduces eye strain.
+
+### New Features
+- **3D Chart Performance**: You can now render complex 3D visualizations 50% faster with WebGL acceleration. Charts stay responsive even with thousands of data points.
+  **Related Ticket:** JIRA-1001
+
+- **Dark Mode**: Switch themes in **Settings > Appearance** to reduce eye strain during extended use.
+  **Related Ticket:** JIRA-1002
 
 ## Bug Fixes
-- Fixed memory leak in timeline widget. Improves stability with large datasets.
+- Fixed memory leak in timeline widget that caused slowdowns with large datasets.
+  **Related Ticket:** JIRA-1003
 
 ## Known Issues
-| Issue | Workaround | Timeline |
-|-------|-----------|----------|
-| Dark mode glitch in Safari <15 | Use light mode or upgrade browser | Fixed in v2.4.1 |
+
+### Dark Mode Glitch in Safari
+**Related Ticket:** JIRA-1010
+
+**Issue:** Dark mode display not rendering correctly in Safari versions earlier than 15.
+
+**Workaround:** Use light mode or upgrade to Safari 15 or later. Fix coming in v2.4.1.
 ```
 
-### Example 2: Security Fix
+### Example 2: Bug Fixes and Enhancements
 
-**Input**: CVE-2026-15847 privilege escalation, 30% query optimization, internal audience
+**Input**: Fixed auth issue (JIRA-2001), improved query speed (JIRA-2002), no new features
 
 **Output**:
 ```markdown
 # Release Notes – v3.1.1
 **Released**: 2026-07-16
 
-## Bug Fixes
-- **Security Update**: Patched privilege escalation vulnerability [CVE-2026-15847].
-  Update immediately if you process sensitive data.
+## What's New
 
-## Improvements
-- Database queries are now 30% faster. Reports generate quicker with less load.
+### Enhancements
+- Database queries are now 30% faster. Reports generate with less load on the system.
+  **Related Ticket:** JIRA-2002
+
+## Bug Fixes
+- Fixed privilege escalation vulnerability in session handling. Update immediately if you process sensitive data.
+  **Related Ticket:** JIRA-2001
 ```
 
-### Example 3: Breaking Change
+### Example 3: Multiple Items with Known Issues
 
-**Input**: REST to GraphQL migration, new dashboard, Node.js 16+ required, developer audience
+**Input**: New dashboard (JIRA-5001), API migration (JIRA-5002), GraphQL latency issue (JIRA-5010)
 
 **Output**:
 ```markdown
@@ -124,18 +166,22 @@ Optional sections (if data contains them):
 **Released**: 2026-07-16
 
 ## What's New
-- **Real-Time Analytics Dashboard**: Monitor live metrics with instant updates.
-  Available in the console; customize widgets per your workflow.
 
-## ⚠️ Breaking Changes
-- **API Migration**: REST endpoints replaced with GraphQL. Migrate by [DATE].
-  See migration guide: [LINK]. GraphQL is faster and more flexible.
-- **Node.js 16+**: Minimum version requirement. Update deployments before upgrading.
+### New Features
+- **Real-Time Analytics Dashboard**: Monitor live metrics with instant updates. Customize widgets in the console to match your workflow.
+  **Related Ticket:** JIRA-5001
+
+- **GraphQL API**: REST endpoints replaced with GraphQL for faster, more flexible queries. Migrate using the migration guide.
+  **Related Ticket:** JIRA-5002
 
 ## Known Issues
-| Issue | Workaround | Timeline |
-|-------|-----------|----------|
-| GraphQL playground latency on large queries | Use Apollo Client or urql | Fixed in v5.1.0 |
+
+### GraphQL Playground Latency
+**Related Ticket:** JIRA-5010
+
+**Issue:** Large GraphQL queries experience slower performance in the GraphQL playground.
+
+**Workaround:** Use Apollo Client or urql for production queries. Playground performance improved in v5.1.0.
 ```
 
 ## Validation Checklist
